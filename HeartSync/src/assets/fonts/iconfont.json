@@ -1,0 +1,30 @@
+{
+  "id": "4833723",
+  "name": "HeartSync",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "14673140",
+      "name": "新增关注",
+      "font_class": "xinzengguanzhu",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "12037475",
+      "name": "评论",
+      "font_class": "pinglun",
+      "unicode": "e767",
+      "unicode_decimal": 59239
+    },
+    {
+      "icon_id": "14694271",
+      "name": "赞和收藏",
+      "font_class": "zanheshoucang",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    }
+  ]
+}
