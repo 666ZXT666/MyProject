@@ -4,8 +4,10 @@ import App from './App.vue'
 import { createPinia } from 'pinia'
 import router from './router'
 import './assets/fonts/iconfont.css'
+import lazyDirective from './directives/lazy'
 
 createApp(App)
 .use(router)
-.use(createPinia())     
+.use(createPinia())
+.directive('lazy', lazyDirective)   
 .mount('#app')
