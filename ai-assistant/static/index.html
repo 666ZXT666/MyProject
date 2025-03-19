@@ -1,55 +1,119 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT智能助手</title>
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        #tabBar {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 0;
+        }
+
+        #tabBar-item a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+        }
+
+        #tabBar-item a:hover {
+            background-color: #34495e;
+        }
+        
+        #tabBar-item a.active {
+            background-color: #3498db;
+        }
+
+        #app {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 消息样式 */
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        
+        .user-message {
+            background-color: #3498db;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        
+        .assistant-message {
+            background-color: #f0f0f0;
+            color: #333;
+            align-self: flex-start;
+        }
+    </style>
 </head>
 <body>
-<div class="chat-container">
-    <!-- 左侧：聊天记录 -->
-    <div class="chat-left">
-        <h1><i class="fas fa-comment-alt"></i> IT智能助手</h1>
-        <div id="chat-log" class="chat-log has-messages">
-            <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
-        </div>   
-            <!-- 占位内容 -->
-        <!-- 加载指示器 -->
-        <div class="loading-indicator">加载中...</div>
-            <!-- 输入区域 -->
-        <div class="input-area">
-            <div class="input-with-icon">
-                <textarea id="message" rows="4" placeholder="在这里输入您的消息..."></textarea>
-                <button class="send-icon"><i class="fas fa-paper-plane"></i></button>
-            </div>
+    <div id="tabBar">
+        <div id="tabBar-item" style="display: flex; justify-content: space-around;">
+            <a href="#/home" id="home-tab">聊天</a>
+            <a href="#/about" id="about-tab">关于</a>
         </div>
-        
-        <!-- 回到顶部按钮 -->
-        <button id="back-to-top" class="back-to-top"><i class="fas fa-arrow-up"></i></button>
     </div>
 
-    <!-- 右侧：对话历史和设置 -->
-    <div class="chat-right">
-        <div class="top-nav">
-            <button class="button secondary" onclick="startNewConversation()">新对话 <i class="fas fa-redo-alt"></i></button>
-            <button class="button secondary" onclick="saveCurrentConversation()">保存对话 <i class="fas fa-save"></i></button>
-        </div>
-        <div id="conversation-list" class="conversation-list"></div>
-        <div class="input-group">
-            <label for="temperature">创意度 (0-1.5):</label>
-            <input type="number" id="temperature" placeholder="请输入创意度值" step="0.1" min="0" max="1.5">
-        </div>
-        <div class="input-group">
-            <label for="model">模式选择:</label>
-            <select id="model">
-                <option value="deepseek-chat">对话模式</option>
-                <option value="deepseek-coder">编码模式</option>
-            </select>
-        </div>
-    </div>
-</div>
-<script src="js/common.js"></script>
+    <div id="app"></div>
+    <script type="module">
+        import { loadTemplates } from './templates/template.mjs';
+        import Router from './router/index.mjs';
+
+        async function initApp() {
+            try {
+                const templates = await loadTemplates();
+                const router = new Router();
+                const app = document.getElementById('app');
+                
+                // 注册路由
+                router.register('/home', templates.home);
+                router.register('/about', templates.about);
+                
+                // 更新标签选中状态
+                function updateTabState() {
+                    const hash = window.location.hash.slice(1) || '/home';
+                    const tabs = document.querySelectorAll('#tabBar-item a');
+                    tabs.forEach(tab => {
+                        if (tab.getAttribute('href') === '#' + hash) {
+                            tab.classList.add('active');
+                        } else {
+                            tab.classList.remove('active');
+                        }
+                    });
+                }
+                
+                // 监听hash变化更新标签状态
+                window.addEventListener('hashchange', updateTabState);
+                
+                // 初始化标签状态
+                updateTabState();
+                
+                // 初始化加载
+                router.load(app);
+                
+                console.log('应用已初始化');
+            } catch (error) {
+                console.error('初始化应用失败:', error);
+            }
+        }
+        
+        // 启动应用
+        initApp();
+    </script>
 </body>
 </html>
