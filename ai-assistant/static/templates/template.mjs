@@ -1,4 +1,3 @@
-// 预加载模板
 export async function loadTemplates() {
     const templates = {};
     
